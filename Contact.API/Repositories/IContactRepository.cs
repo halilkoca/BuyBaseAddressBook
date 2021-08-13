@@ -10,6 +10,7 @@ namespace Contact.API.Repositories
         Task<ContactEntity> Create(ContactEntity model);
         Task<bool> Delete(List<string> ids);
         Task<bool> Delete(string id);
+        Task<IEnumerable<ContactEntity>> Get();
         Task<ContactEntity> Get(string id);
         Task<ContactEntity> GetByName(string name);
         Task<ContactEntity> Update(ContactEntity model);

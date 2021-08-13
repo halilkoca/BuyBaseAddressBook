@@ -38,6 +38,10 @@ namespace Contact.API.Repositories
             DeleteResult result = await _contactContext.Contacts.DeleteOneAsync(x => x.UUID == id);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
+        public async Task<IEnumerable<ContactEntity>> Get()
+        {
+            return await _contactContext.Contacts.Find(p => true).ToListAsync();
+        }
 
         public async Task<ContactEntity> Get(string id)
         {
