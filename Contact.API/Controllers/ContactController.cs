@@ -59,7 +59,7 @@ namespace Contact.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<ContactEntity>> Create([FromBody] List<ContactEntity> model)
+        public async Task<ActionResult<ContactEntity>> CreateBulk([FromBody] List<ContactEntity> model)
         {
             await _contactRepository.Create(model);
             return Ok(model);
@@ -67,7 +67,7 @@ namespace Contact.API.Controllers
 
         [HttpPut]
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateProduct([FromBody] ContactEntity product)
+        public async Task<IActionResult> Update([FromBody] ContactEntity product)
         {
             return Ok(await _contactRepository.Update(product));
         }
@@ -81,7 +81,7 @@ namespace Contact.API.Controllers
 
         [HttpDelete]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Delete(List<string> id)
+        public async Task<IActionResult> DeleteBulk(List<string> id)
         {
             return Ok(await _contactRepository.Delete(id));
         }

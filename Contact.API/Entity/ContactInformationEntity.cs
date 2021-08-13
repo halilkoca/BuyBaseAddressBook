@@ -7,12 +7,12 @@ namespace Contact.API.Entity
 {
     public class ContactInformationEntity
     {
-        [JsonConverter(typeof(StringEnumConverter))]
         [BsonRepresentation(BsonType.String)]
         public InformationType Type { get; set; }
         public string Value { get; set; }
     }
 
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum InformationType
     {
         PhoneNumber = 1,

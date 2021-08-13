@@ -50,7 +50,7 @@ namespace Contact.API.Repositories
 
         public async Task<ContactEntity> GetByName(string name)
         {
-            FilterDefinition<ContactEntity> filter = Builders<ContactEntity>.Filter.ElemMatch(p => p.UUID, name);
+            FilterDefinition<ContactEntity> filter = Builders<ContactEntity>.Filter.Eq(p => p.Name, name);
             return await _contactContext.Contacts.Find(filter).FirstOrDefaultAsync();
         }
 
