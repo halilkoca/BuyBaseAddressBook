@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  contactdb:
+    container_name: contactdb
+    restart: always
+    ports:
+        - "27017:27017"
+    volumes:
+        - mongo_data:/data/db
+
+  contact.api:
+    container_name: contact.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - contactdb
+    ports:
+      - "8000:80"
