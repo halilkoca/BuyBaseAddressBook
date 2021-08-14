@@ -22,7 +22,7 @@ namespace Report.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<LocationReportEntity>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<LocationReportEntity>>> Get([FromQuery] RequestModel model)
+        public async Task<ActionResult<IEnumerable<LocationReportEntity>>> Location([FromQuery] RequestModel model)
         {
             return Ok();
         }

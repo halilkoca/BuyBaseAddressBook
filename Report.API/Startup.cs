@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Report.API.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,8 @@ namespace Report.API
             {
                 options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
             });
+
+            services.AddScoped<IReportRepository, ReportRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
