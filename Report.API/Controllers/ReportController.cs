@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Report.API.Entity;
+using Report.API.Model;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Report.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<LocationReportEntity>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<LocationReportEntity>>> Get()
+        public async Task<ActionResult<IEnumerable<LocationReportEntity>>> Get([FromQuery] RequestModel model)
         {
             return Ok();
         }
