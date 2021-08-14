@@ -1,5 +1,6 @@
 ﻿using Contact.API.Data;
 using Contact.API.Entity;
+using Contact.API.Model;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -38,9 +39,16 @@ namespace Contact.API.Repositories
             DeleteResult result = await _contactContext.Contacts.DeleteOneAsync(x => x.UUID == id);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
-        public async Task<IEnumerable<ContactEntity>> Get()
+        public async Task<IEnumerable<ContactEntity>> Get(RequestModel model)
         {
-            return await _contactContext.Contacts.Find(p => true).ToListAsync();
+            var sortt = Builders<ContactEntity>.Sort.Ascending(x => x.Name);
+
+            var data = await _contactContext.Contacts.Find(c => true)
+                .Sort(sortt)
+                .Skip((model.PageNumber - 1) * model.PageSize)
+                .Limit(model.PageSize)
+                .ToListAsync();
+            return data;
         }
 
         public async Task<ContactEntity> Get(string id)

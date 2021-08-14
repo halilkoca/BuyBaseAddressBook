@@ -1,4 +1,5 @@
 ﻿using Contact.API.Entity;
+using Contact.API.Model;
 using Contact.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,9 +26,9 @@ namespace Contact.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ContactEntity>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<ContactEntity>>> Get()
+        public async Task<ActionResult<IEnumerable<ContactEntity>>> Get([FromQuery] RequestModel model)
         {
-            var products = await _contactRepository.Get();
+            var products = await _contactRepository.Get(model);
             return Ok(products);
         }
 
