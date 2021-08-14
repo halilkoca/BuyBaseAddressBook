@@ -13,6 +13,7 @@ services:
     container_name: contact.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - DatabaseSettings:ConnectionString=mongodb://catalogdb:27017
     depends_on:
       - contactdb
     ports:
