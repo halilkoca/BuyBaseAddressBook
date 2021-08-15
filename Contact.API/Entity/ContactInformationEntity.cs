@@ -5,8 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace Contact.API.Entity
 {
-    public class ContactInformationEntity
+    public class ContactInformationEntity : BaseEntity
     {
+
         [BsonRepresentation(BsonType.String)]
         public InformationType Type { get; set; }
         public string Value { get; set; }

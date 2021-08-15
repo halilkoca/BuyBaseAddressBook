@@ -6,7 +6,9 @@ namespace Contact.API.Entity
 {
     public class BaseEntity
     {
-        
+        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        public string UUID { get; set; }
 
         public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }

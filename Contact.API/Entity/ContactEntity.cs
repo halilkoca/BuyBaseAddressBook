@@ -1,15 +1,9 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.IdGenerators;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Contact.API.Entity
 {
-    public class ContactEntity
+    public class ContactEntity : BaseEntity
     {
-        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string UUID { get; set; }
-
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Firm { get; set; }
