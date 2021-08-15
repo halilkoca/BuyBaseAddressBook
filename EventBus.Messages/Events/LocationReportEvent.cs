@@ -1,5 +1,12 @@
-﻿namespace EventBus.Messages.Events
+﻿using System.Collections.Generic;
+
+namespace EventBus.Messages.Events
 {
+    public class LocationReportEventList : IntegrationBaseEvent
+    {
+        public List<LocationReportEvent> LocationReportEvents { get; set; }
+    }
+
     public class LocationReportEvent
     {
         public string Location { get; set; }

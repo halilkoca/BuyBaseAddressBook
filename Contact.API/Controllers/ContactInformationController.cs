@@ -48,8 +48,8 @@ namespace ContactInformation.API.Controllers
 
             // publish event 
             var result = await _reportRepository.GenerateLocationReport();
-            var publishObject = _mapper.Map<List<LocationReportEvent>>(result);
-            await _publishEndpoint.Publish(publishObject);
+            var locationReport = _mapper.Map<List<LocationReportEvent>>(result);
+            await _publishEndpoint.Publish(new LocationReportEventList { LocationReportEvents = locationReport });
 
 
             return Ok(model);
