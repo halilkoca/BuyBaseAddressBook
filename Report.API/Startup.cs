@@ -1,10 +1,12 @@
+using EventBus.Messages.Common;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Report.API.Repositories;
+using Report.API.EventBusConsumer;
 
 namespace Report.API
 {
@@ -38,7 +40,26 @@ namespace Report.API
                 options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
             });
 
-            services.AddScoped<IReportRepository, ReportRepository>();
+            string rabbitMQConnectionString = Configuration.GetValue<string>("EventBusSettings:HostAddress");
+
+            // MassTransit configuration
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<LocationReportConsumer>();
+
+                config.UsingRabbitMq((context, configuraiton) =>
+                {
+                    configuraiton.Host(rabbitMQConnectionString);
+                    configuraiton.ReceiveEndpoint(EventBusContants.LocationReportQueue, c =>
+                    {
+                        c.ConfigureConsumer<LocationReportConsumer>(context);
+                    });
+                });
+            });
+            services.AddMassTransitHostedService();
+
+            services.AddAutoMapper(typeof(Startup));
+            services.AddScoped<LocationReportConsumer>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

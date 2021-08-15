@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Report.API.Entity;
 using Report.API.Model;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,18 +17,20 @@ namespace Report.API.Controllers
     public class ReportController : ControllerBase
     {
         private readonly ILogger<ReportController> _logger;
+        private readonly IDistributedCache _redisCache;
 
-        public ReportController(ILogger<ReportController> logger)
+        public ReportController(ILogger<ReportController> logger, IDistributedCache redisCache)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _redisCache = redisCache ?? throw new ArgumentNullException(nameof(redisCache));
         }
-
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<LocationReportEntity>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<LocationReportEntity>>> Location([FromQuery] RequestModel model)
+        public async Task<IActionResult> Location()
         {
-            return Ok();
+            var model = await _redisCache.GetStringAsync(ReportKey.LocationReport);
+            return Ok(JsonConvert.DeserializeObject<List<LocationReportEntity>>(model));
         }
 
 

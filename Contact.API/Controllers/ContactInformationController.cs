@@ -51,7 +51,6 @@ namespace ContactInformation.API.Controllers
             var locationReport = _mapper.Map<List<LocationReportEvent>>(result);
             await _publishEndpoint.Publish(new LocationReportEventList { LocationReportEvents = locationReport });
 
-
             return Ok(model);
         }
 

@@ -4,9 +4,9 @@ using EventBus.Messages.Events;
 
 namespace Contact.API.Mapper
 {
-    public class LocationReport : Profile
+    public class MapperProfile : Profile
     {
-        public LocationReport()
+        public MapperProfile()
         {
             CreateMap<LocationReportModel, LocationReportEvent>().ReverseMap();
         }

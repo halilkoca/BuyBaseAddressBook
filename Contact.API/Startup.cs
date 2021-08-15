@@ -51,7 +51,6 @@ namespace Contact.API
                     configuraiton.Host(Configuration.GetValue<string>("EventBusSettings:HostAddress"));
                 });
             });
-
             services.AddMassTransitHostedService();
 
             services.AddControllers();

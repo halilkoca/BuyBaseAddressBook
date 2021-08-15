@@ -24,7 +24,16 @@ namespace Contact.API.Repositories.Report
                 .Where(x => x.ContactInformations.Any(a => a.Type == InformationType.Location))
                 .ToListAsync();
 
-            return new List<LocationReportModel>();
+            var response = result
+                .Select(x => x.ContactInformations)
+                .Select(x => new LocationReportModel
+                {
+                    Location = x.FirstOrDefault().Value,
+                    PeopleCount = x.Count(y => y.Value == x.FirstOrDefault().Value),
+                    PhoneNumberCount = x.Count(a => a.Value == x.FirstOrDefault().Value)
+                });
+
+            return response;
         }
 
 
