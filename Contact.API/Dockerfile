@@ -7,6 +7,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["Contact.API/Contact.API.csproj", "Contact.API/"]
+COPY ["EventBus.Messages/EventBus.Messages.csproj", "EventBus.Messages/"]
 RUN dotnet restore "Contact.API/Contact.API.csproj"
 COPY . .
 WORKDIR "/src/Contact.API"
