@@ -4,11 +4,23 @@ services:
   contactdb:
     image: mongo
 
+  reportdb:
+    image: redis:alpine
+    
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
   contact.api:
     image: ${DOCKER_REGISTRY-}contactapi
     build:
       context: .
       dockerfile: Contact.API/Dockerfile
+
+  report.api:
+    image: ${DOCKER_REGISTRY-}reportapi
+    build:
+      context: .
+      dockerfile: Report.API/Dockerfile
 
 volumes:
   mongo_data:

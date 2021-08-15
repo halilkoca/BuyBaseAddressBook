@@ -9,6 +9,18 @@ services:
     volumes:
         - mongo_data:/data/db
 
+  reportdb:
+    container_name: reportdb
+    restart: always
+    ports:
+        - "6379:6379"
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+
   contact.api:
     container_name: contact.api
     environment:
@@ -18,3 +30,12 @@ services:
       - contactdb
     ports:
       - "8000:80"
+  report.api:
+    container_name: report.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - CacheSettings:ConnectionString=reportdb:6379
+    depends_on:
+      - reportdb
+    ports:
+      - "8001:80"
