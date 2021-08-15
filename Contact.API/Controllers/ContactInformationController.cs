@@ -1,5 +1,9 @@
-﻿using Contact.API.Entity;
-using Contact.API.Repositories;
+﻿using AutoMapper;
+using Contact.API.Entity;
+using Contact.API.Repositories.ContactInformation;
+using Contact.API.Repositories.Report;
+using EventBus.Messages.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,14 +17,21 @@ namespace ContactInformation.API.Controllers
     [Route("api/v1/[controller]/[action]")]
     public class ContactInformationController : ControllerBase
     {
-        private readonly IContactInformationRepository _ContactInformationRepository;
+        private readonly IContactInformationRepository _contactInformationRepository;
+        private readonly IReportRepository _reportRepository;
         private readonly ILogger<ContactInformationController> _logger;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMapper _mapper;
 
-        public ContactInformationController(IContactInformationRepository ContactInformationRepository, ILogger<ContactInformationController> logger)
+        public ContactInformationController(IContactInformationRepository contactInformationRepository, IReportRepository reportRepository,
+            ILogger<ContactInformationController> logger, IPublishEndpoint publishEndpoint, IMapper mapper
+            )
         {
-            _ContactInformationRepository = ContactInformationRepository ?? throw new ArgumentNullException(nameof(ContactInformationRepository));
+            _contactInformationRepository = contactInformationRepository ?? throw new ArgumentNullException(nameof(contactInformationRepository));
+            _reportRepository = reportRepository ?? throw new ArgumentNullException(nameof(reportRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
+            _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         /// <summary>
@@ -31,9 +42,16 @@ namespace ContactInformation.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(ContactInformationEntity), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<ContactInformationEntity>> Create([FromBody] string id, ContactInformationEntity model)
+        public async Task<ActionResult<ContactInformationEntity>> Create([FromQuery] string id, [FromBody] ContactInformationEntity model)
         {
-            await _ContactInformationRepository.Create(id, model);
+            await _contactInformationRepository.Create(id, model);
+
+            // publish event 
+            var result = await _reportRepository.GenerateLocationReport();
+            var publishObject = _mapper.Map<List<LocationReportEvent>>(result);
+            await _publishEndpoint.Publish(publishObject);
+
+
             return Ok(model);
         }
 
@@ -45,9 +63,9 @@ namespace ContactInformation.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(ContactInformationEntity), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Update([FromBody] string id, ContactInformationEntity model)
+        public async Task<IActionResult> Update([FromQuery] string id, [FromBody] ContactInformationEntity model)
         {
-            return Ok(await _ContactInformationRepository.Update(id, model));
+            return Ok(await _contactInformationRepository.Update(id, model));
         }
 
         /// <summary>
@@ -58,9 +76,9 @@ namespace ContactInformation.API.Controllers
         /// <returns></returns>
         [HttpDelete("{id:length(24)},{informationId:length(24)}")]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Delete(string id, string informationId)
+        public async Task<IActionResult> Delete([FromQuery] string id, [FromQuery] string informationId)
         {
-            return Ok(await _ContactInformationRepository.Delete(id, informationId));
+            return Ok(await _contactInformationRepository.Delete(id, informationId));
         }
 
         /// <summary>
@@ -71,9 +89,9 @@ namespace ContactInformation.API.Controllers
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteBulk(string id, List<string> informationIds)
+        public async Task<IActionResult> DeleteBulk([FromQuery] string id, [FromBody] List<string> informationIds)
         {
-            return Ok(await _ContactInformationRepository.Delete(id, informationIds));
+            return Ok(await _contactInformationRepository.Delete(id, informationIds));
         }
     }
 }

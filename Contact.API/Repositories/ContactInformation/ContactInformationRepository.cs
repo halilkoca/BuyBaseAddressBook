@@ -4,8 +4,10 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MongoDB.Driver.Linq;
+using MongoDB.Bson;
 
-namespace Contact.API.Repositories
+namespace Contact.API.Repositories.ContactInformation
 {
     public class ContactInformationRepository : IContactInformationRepository
     {
@@ -24,10 +26,20 @@ namespace Contact.API.Repositories
         /// <returns></returns>
         public async Task<ContactInformationEntity> Create(string id, ContactInformationEntity model)
         {
-            var filter = Builders<ContactEntity>.Filter.Eq(e => e.UUID, id)
-                & Builders<ContactEntity>.Filter.ElemMatch(e => e.ContactInformations, Builders<ContactInformationEntity>.Filter.Eq(e => e.Type, model.Type));
-            var update = Builders<ContactEntity>.Update.Push("ContactInformations", model);
-            await _contactContext.Contacts.FindOneAndUpdateAsync(filter, update);
+            try
+            {
+                var update = Builders<ContactEntity>.Update.Push(x => x.ContactInformations, model);
+                var result = await _contactContext.Contacts.UpdateOneAsync(x => x.UUID == id, update);
+            }
+            catch (MongoWriteException e)
+            {
+                if (e.WriteConcernError == null)
+                {
+                    model.UUID = ObjectId.GenerateNewId().ToString();
+                    var insert = Builders<ContactEntity>.Update.Set(x => x.ContactInformations, new List<ContactInformationEntity> { model });
+                    var res = await _contactContext.Contacts.UpdateOneAsync(x => x.UUID == id, insert);
+                }
+            }
 
             return model;
         }

@@ -1,6 +1,6 @@
 ﻿using Contact.API.Entity;
 using Contact.API.Model;
-using Contact.API.Repositories;
+using Contact.API.Repositories.Contact;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

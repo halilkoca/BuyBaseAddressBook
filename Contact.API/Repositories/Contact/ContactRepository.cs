@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Contact.API.Repositories
+namespace Contact.API.Repositories.Contact
 {
     public class ContactRepository : IContactRepository
     {
