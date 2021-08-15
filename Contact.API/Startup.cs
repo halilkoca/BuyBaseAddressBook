@@ -1,5 +1,6 @@
 using Contact.API.Data;
 using Contact.API.Repositories;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +46,17 @@ namespace Contact.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contact.API", Version = "v1" });
             });
+
+            // MassTransit configuration
+            services.AddMassTransit(config =>
+            {
+                config.UsingRabbitMq((context, configuraiton) =>
+                {
+                    configuraiton.Host(Configuration.GetValue<string>("EventBusSettings:HostAddress"));
+                });
+            });
+
+            services.AddMassTransitHostedService();
 
             services.AddScoped<IContactContext, ContactContext>();
             services.AddScoped<IContactRepository, ContactRepository>();
