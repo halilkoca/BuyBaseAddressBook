@@ -75,7 +75,7 @@ namespace Contact.API.Extensions
                             UUID = "602d2149e773f2a3990b4716",
                             CreatedDate = System.DateTime.UtcNow,
                             Type = InformationType.PhoneNumber,
-                            Value = "+905327320230"
+                            Value = "+905327320231"
                         },
                         new ContactInformationEntity
                         {
@@ -107,7 +107,7 @@ namespace Contact.API.Extensions
                             UUID = "602d2149e773f2a3990b4720",
                             CreatedDate = System.DateTime.UtcNow,
                             Type = InformationType.PhoneNumber,
-                            Value = "+905327320230"
+                            Value = "+905327320233"
                         },
                         new ContactInformationEntity
                         {
@@ -139,7 +139,7 @@ namespace Contact.API.Extensions
                             UUID = "602d2149e773f2a3990b4724",
                             CreatedDate = System.DateTime.UtcNow,
                             Type = InformationType.PhoneNumber,
-                            Value = "+905327320230"
+                            Value = "+905327320234"
                         },
                         new ContactInformationEntity
                         {
@@ -171,7 +171,7 @@ namespace Contact.API.Extensions
                             UUID = "602d2149e773f2a3990b4728",
                             CreatedDate = System.DateTime.UtcNow,
                             Type = InformationType.PhoneNumber,
-                            Value = "+905327320230"
+                            Value = "+905327320235"
                         },
                         new ContactInformationEntity
                         {
@@ -203,7 +203,7 @@ namespace Contact.API.Extensions
                             UUID = "602d2149e773f2a3990b4732",
                             CreatedDate = System.DateTime.UtcNow,
                             Type = InformationType.PhoneNumber,
-                            Value = "+905327320230"
+                            Value = "+905327320236"
                         },
                         new ContactInformationEntity
                         {
