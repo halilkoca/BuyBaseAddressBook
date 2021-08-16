@@ -2,6 +2,7 @@ using Contact.API.Data;
 using Contact.API.Repositories.Contact;
 using Contact.API.Repositories.ContactInformation;
 using Contact.API.Repositories.Report;
+using FluentValidation.AspNetCore;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,7 +54,12 @@ namespace Contact.API
             });
             services.AddMassTransitHostedService();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(s =>
+                {
+                    s.RegisterValidatorsFromAssemblyContaining<Startup>();
+                });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contact.API", Version = "v1" });
