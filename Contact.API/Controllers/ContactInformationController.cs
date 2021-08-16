@@ -46,10 +46,7 @@ namespace ContactInformation.API.Controllers
         {
             await _contactInformationRepository.Create(id, model);
 
-            // publish event 
-            var result = await _reportRepository.GenerateLocationReport();
-            var locationReport = _mapper.Map<List<LocationReportEvent>>(result);
-            await _publishEndpoint.Publish(new LocationReportEventList { LocationReportEvents = locationReport });
+            await GenerateReport();
 
             return Ok(model);
         }
@@ -64,7 +61,11 @@ namespace ContactInformation.API.Controllers
         [ProducesResponseType(typeof(ContactInformationEntity), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update([FromQuery] string id, [FromBody] ContactInformationEntity model)
         {
-            return Ok(await _contactInformationRepository.Update(id, model));
+            await _contactInformationRepository.Update(id, model);
+
+            await GenerateReport();
+
+            return Ok(model);
         }
 
         /// <summary>
@@ -77,7 +78,11 @@ namespace ContactInformation.API.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Delete([FromQuery] string id, [FromQuery] string informationId)
         {
-            return Ok(await _contactInformationRepository.Delete(id, informationId));
+            var result = await _contactInformationRepository.Delete(id, informationId);
+
+            await GenerateReport();
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -90,7 +95,20 @@ namespace ContactInformation.API.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteBulk([FromQuery] string id, [FromBody] List<string> informationIds)
         {
-            return Ok(await _contactInformationRepository.Delete(id, informationIds));
+            var result = await _contactInformationRepository.Delete(id, informationIds);
+
+            await GenerateReport();
+
+            return Ok(result);
+        }
+
+
+        private async Task GenerateReport()
+        {
+            // publish event 
+            var result = await _reportRepository.GenerateLocationReport();
+            var locationReport = _mapper.Map<List<LocationReportEvent>>(result);
+            await _publishEndpoint.Publish(new LocationReportEventList { LocationReportEvents = locationReport });
         }
     }
 }

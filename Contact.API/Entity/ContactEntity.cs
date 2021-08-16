@@ -4,6 +4,11 @@ namespace Contact.API.Entity
 {
     public class ContactEntity : BaseEntity
     {
+        public ContactEntity()
+        {
+            ContactInformations = new HashSet<ContactInformationEntity>();
+        }
+
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Firm { get; set; }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 using MongoDB.Bson;
+using System.Linq;
 
 namespace Contact.API.Repositories.ContactInformation
 {
@@ -26,19 +27,18 @@ namespace Contact.API.Repositories.ContactInformation
         /// <returns></returns>
         public async Task<ContactInformationEntity> Create(string id, ContactInformationEntity model)
         {
-            try
+            var contact = _contactContext.Contacts.AsQueryable().Where(x => x.UUID == id).FirstOrDefault();
+            if (contact == null)
             {
-                var update = Builders<ContactEntity>.Update.Push(x => x.ContactInformations, model);
-                var result = await _contactContext.Contacts.UpdateOneAsync(x => x.UUID == id, update);
+                throw new NullReferenceException("Contact Does Not Exist");
             }
-            catch (MongoWriteException e)
+
+            var exist = contact.ContactInformations?.Where(x => x.Type == model.Type && x.Value == model.Value).FirstOrDefault();
+            if (exist == null)
             {
-                if (e.WriteConcernError == null)
-                {
-                    model.UUID = ObjectId.GenerateNewId().ToString();
-                    var insert = Builders<ContactEntity>.Update.Set(x => x.ContactInformations, new List<ContactInformationEntity> { model });
-                    var res = await _contactContext.Contacts.UpdateOneAsync(x => x.UUID == id, insert);
-                }
+                model.UUID = ObjectId.GenerateNewId().ToString();
+                contact.ContactInformations.Add(model);
+                await _contactContext.Contacts.ReplaceOneAsync(c => c.UUID == id, contact);
             }
 
             return model;
