@@ -15,27 +15,24 @@ namespace Contact.API.Controllers
     public class ContactController : ControllerBase
     {
         private readonly IContactRepository _contactRepository;
-        private readonly ILogger<ContactController> _logger;
 
-        public ContactController(IContactRepository contactRepository, ILogger<ContactController> logger)
+        public ContactController(IContactRepository contactRepository)
         {
             _contactRepository = contactRepository ?? throw new ArgumentNullException(nameof(contactRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ContactEntity>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<ContactEntity>>> Get([FromQuery] RequestModel model)
+        public async Task<ActionResult> Get([FromQuery] RequestModel model)
         {
-            var products = await _contactRepository.Get(model);
-            return Ok(products);
+            var contacts = await _contactRepository.Get(model);
+            return Ok(contacts);
         }
 
         [HttpGet("{id:length(24)}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<ContactEntity>>> Get(string id)
+        public async Task<ActionResult> Get(string id)
         {
             var products = await _contactRepository.Get(id);
             return Ok(products);
@@ -44,7 +41,7 @@ namespace Contact.API.Controllers
         [HttpGet("{name}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<ContactEntity>>> GetByName(string name)
+        public async Task<ActionResult> GetByName(string name)
         {
             var products = await _contactRepository.GetByName(name);
             return Ok(products);
@@ -52,7 +49,7 @@ namespace Contact.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<ContactEntity>> Create([FromBody] ContactEntity model)
+        public async Task<ActionResult> Create([FromBody] ContactEntity model)
         {
             await _contactRepository.Create(model);
             return Ok(model);
@@ -60,7 +57,7 @@ namespace Contact.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<ContactEntity>> CreateBulk([FromBody] List<ContactEntity> model)
+        public async Task<ActionResult> CreateBulk([FromBody] List<ContactEntity> model)
         {
             await _contactRepository.Create(model);
             return Ok(model);

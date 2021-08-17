@@ -19,20 +19,18 @@ namespace ContactInformation.API.Controllers
     {
         private readonly IContactInformationRepository _contactInformationRepository;
         private readonly IReportRepository _reportRepository;
-        private readonly ILogger<ContactInformationController> _logger;
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly IMapper _mapper;
 
-        public ContactInformationController(IContactInformationRepository contactInformationRepository, IReportRepository reportRepository,
-            ILogger<ContactInformationController> logger, IPublishEndpoint publishEndpoint, IMapper mapper
-            )
+        public ContactInformationController(IContactInformationRepository contactInformationRepository, IReportRepository reportRepository, IPublishEndpoint publishEndpoint, IMapper mapper)
         {
             _contactInformationRepository = contactInformationRepository ?? throw new ArgumentNullException(nameof(contactInformationRepository));
             _reportRepository = reportRepository ?? throw new ArgumentNullException(nameof(reportRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
+
+
 
         /// <summary>
         /// A Single New Record into Contact Information
