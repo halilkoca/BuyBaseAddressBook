@@ -3,7 +3,6 @@ using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using Report.API.Controllers;
 using Report.API.Entity;
-using System;
 using System.Collections.Generic;
 using Xunit;
 

@@ -28,6 +28,11 @@ namespace Report.API.Controllers
         public async Task<IActionResult> Location()
         {
             var model = await _redisCache.GetStringAsync(ReportKey.LocationReport);
+            if (string.IsNullOrWhiteSpace(model))
+            {
+                return NotFound();
+            }
+
             return Ok(JsonConvert.DeserializeObject<List<LocationReportEntity>>(model));
         }
 
