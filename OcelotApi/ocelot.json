@@ -50,18 +50,6 @@
       "UpstreamHttpMethod": [ "POST" ]
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Contact/Create",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": "8000"
-        }
-      ],
-      "UpstreamPathTemplate": "/Contact/Create",
-      "UpstreamHttpMethod": [ "POST" ]
-    },
-    {
       "DownstreamPathTemplate": "/api/v1/Contact/CreateBulk",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
