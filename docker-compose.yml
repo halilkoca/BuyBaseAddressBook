@@ -22,5 +22,12 @@ services:
       context: .
       dockerfile: Report.API/Dockerfile
 
+  ocelotapi:
+    image: ${DOCKER_REGISTRY-}ocelotapi
+    build:
+      context: .
+      dockerfile: OcelotApi/Dockerfile
+
 volumes:
   mongo_data:
+

@@ -40,3 +40,13 @@ services:
       - reportdb
     ports:
       - "8001:80"
+
+  ocelotapi:
+    container_name: ocelotapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - contact.api
+      - report.api
+    ports:
+      - "8010:80"
