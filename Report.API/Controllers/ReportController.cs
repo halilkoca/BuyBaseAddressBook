@@ -16,12 +16,10 @@ namespace Report.API.Controllers
     [Route("[controller]")]
     public class ReportController : ControllerBase
     {
-        private readonly ILogger<ReportController> _logger;
         private readonly IDistributedCache _redisCache;
 
-        public ReportController(ILogger<ReportController> logger, IDistributedCache redisCache)
+        public ReportController(IDistributedCache redisCache)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _redisCache = redisCache ?? throw new ArgumentNullException(nameof(redisCache));
         }
 
