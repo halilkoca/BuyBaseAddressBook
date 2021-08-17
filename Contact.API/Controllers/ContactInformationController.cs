@@ -24,8 +24,8 @@ namespace ContactInformation.API.Controllers
 
         public ContactInformationController(
             IContactInformationRepository contactInformationRepository,
-            IReportRepository reportRepository, 
-            IPublishEndpoint publishEndpoint, 
+            IReportRepository reportRepository,
+            IPublishEndpoint publishEndpoint,
             IMapper mapper
             )
         {
@@ -45,6 +45,9 @@ namespace ContactInformation.API.Controllers
         [ProducesResponseType(typeof(ContactInformationEntity), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> Create([FromQuery] string id, [FromBody] ContactInformationEntity model)
         {
+            if (string.IsNullOrWhiteSpace(id) || model == null)
+                return NotFound();
+
             await _contactInformationRepository.Create(id, model);
 
             await GenerateReport();
@@ -62,6 +65,9 @@ namespace ContactInformation.API.Controllers
         [ProducesResponseType(typeof(ContactInformationEntity), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update([FromQuery] string id, [FromBody] ContactInformationEntity model)
         {
+            if (string.IsNullOrWhiteSpace(id) || model == null)
+                return NotFound();
+
             await _contactInformationRepository.Update(id, model);
 
             await GenerateReport();
@@ -79,6 +85,9 @@ namespace ContactInformation.API.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Delete([FromQuery] string id, [FromQuery] string informationId)
         {
+            if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(informationId))
+                return NotFound();
+
             var result = await _contactInformationRepository.Delete(id, informationId);
 
             await GenerateReport();
@@ -96,6 +105,9 @@ namespace ContactInformation.API.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteBulk([FromQuery] string id, [FromBody] List<string> informationIds)
         {
+            if (string.IsNullOrWhiteSpace(id) || informationIds == null || informationIds.Count == 0)
+                return NotFound();
+
             var result = await _contactInformationRepository.Delete(id, informationIds);
 
             await GenerateReport();

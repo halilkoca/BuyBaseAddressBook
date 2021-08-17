@@ -34,6 +34,8 @@ namespace Contact.API.Controllers
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> Get(string id)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                return NotFound();
             var products = await _contactRepository.Get(id);
             return Ok(products);
         }
@@ -43,6 +45,8 @@ namespace Contact.API.Controllers
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetByName(string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+                return NotFound();
             var products = await _contactRepository.GetByName(name);
             return Ok(products);
         }
@@ -51,6 +55,8 @@ namespace Contact.API.Controllers
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> Create([FromBody] ContactEntity model)
         {
+            if (model == null)
+                return NotFound();
             await _contactRepository.Create(model);
             return Ok(model);
         }
@@ -59,6 +65,8 @@ namespace Contact.API.Controllers
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> CreateBulk([FromBody] List<ContactEntity> model)
         {
+            if (model == null || model.Count == 0)
+                return NotFound();
             await _contactRepository.Create(model);
             return Ok(model);
         }
@@ -67,6 +75,8 @@ namespace Contact.API.Controllers
         [ProducesResponseType(typeof(ContactEntity), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update([FromBody] ContactEntity product)
         {
+            if (product == null)
+                return NotFound();
             return Ok(await _contactRepository.Update(product));
         }
 
@@ -74,6 +84,8 @@ namespace Contact.API.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Delete(string id)
         {
+            if (string.IsNullOrWhiteSpace(id))
+                return NotFound();
             return Ok(await _contactRepository.Delete(id));
         }
 
@@ -81,6 +93,8 @@ namespace Contact.API.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteBulk(List<string> id)
         {
+            if (id == null || id.Count == 0)
+                return NotFound();
             return Ok(await _contactRepository.Delete(id));
         }
     }

@@ -76,12 +76,115 @@ namespace Contact.API.Test
         [Fact]
         public async void Get_ActionResult_ReturnOk()
         {
-            var result = await _contactController.Get("");
+            string id = "602d2149e773f2a3990b4711";
+
+            var result = await _contactController.Get(id);
 
             Assert.IsType<OkObjectResult>(result);
         }
 
+        [Fact]
+        public async void Get_IdIsNull_ActionResult_ReturnNotFound()
+        {
+            string id = null;
+            var result = await _contactController.Get(id);
+            Assert.IsType<NotFoundResult>(result);
+        }
 
+
+        [Fact]
+        public async void GetByName_ActionResult_ReturnOk()
+        {
+            string name = "Ali";
+            var result = await _contactController.GetByName(name);
+
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void GetByName_IdIsNull_ActionResult_ReturnNotFound()
+        {
+            string name = null;
+            var result = await _contactController.GetByName(name);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async void Create_ActionResult_ReturnOk()
+        {
+            var result = await _contactController.Create(new ContactEntity());
+
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Create_ModelIsNull_ActionResult_ReturnNotFound()
+        {
+            ContactEntity model = null;
+            var result = await _contactController.Create(model);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async void CreateBulk_ActionResult_ReturnOk()
+        {
+            var result = await _contactController.CreateBulk(_contacts);
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void CreateBulk_ModelIsNull_ActionResult_ReturnNotFound()
+        {
+            List<ContactEntity> model = null;
+            var result = await _contactController.CreateBulk(model);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async void Update_ActionResult_ReturnOk()
+        {
+            var result = await _contactController.Update(new ContactEntity());
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Update_ModelIsNull_ActionResult_ReturnNotFound()
+        {
+            ContactEntity model = null;
+            var result = await _contactController.Update(model);
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async void Delete_ActionResult_ReturnOk()
+        {
+            string id = "602d2149e773f2a3990b4711";
+            var result = await _contactController.Delete(id);
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void Delete_ModelIsNull_ActionResult_ReturnNotFound()
+        {
+            var result = await _contactController.Delete(" ");
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async void DeleteBulk_ActionResult_ReturnOk()
+        {
+            List<string> ids = new List<string> { "602d2149e773f2a3990b4711", "602d2149e773f2a3990b4711" };
+            var result = await _contactController.DeleteBulk(ids);
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public async void DeleteBulk_ModelIsNull_ActionResult_ReturnNotFound()
+        {
+            List<string> ids = null;
+            var result = await _contactController.DeleteBulk(ids);
+            Assert.IsType<NotFoundResult>(result);
+        }
 
     }
 }

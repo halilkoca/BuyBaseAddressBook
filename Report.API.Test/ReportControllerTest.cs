@@ -34,7 +34,7 @@ namespace Report.API.Test
         {
             var result = await _reportController.Location();
 
-            Assert.IsType<OkObjectResult>(result);
+            Assert.IsType<NotFoundResult>(result);
         }
 
     }
