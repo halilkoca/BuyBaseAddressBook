@@ -1,5 +1,7 @@
 ﻿using Contact.API.Entity;
+using Contact.API.Repositories.Report;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using System.Collections.Generic;
@@ -22,6 +24,16 @@ namespace Contact.API.Extensions
             bool existProduct = contacts.Find(p => true).Any();
             if (!existProduct)
                 contacts.InsertManyAsync(GetPreconfiguredProducts());
+
+
+            // redis generate service
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var reportRepository = services.GetRequiredService<IReportRepository>();
+                reportRepository.GenerateReport();
+            }
+
             return host;
         }
 

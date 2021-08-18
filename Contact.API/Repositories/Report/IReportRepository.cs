@@ -6,6 +6,6 @@ namespace Contact.API.Repositories.Report
 {
     public interface IReportRepository
     {
-        Task<IEnumerable<LocationReportModel>> GenerateLocationReport();
+        Task GenerateReport();
     }
 }

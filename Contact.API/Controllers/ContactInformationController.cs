@@ -50,7 +50,7 @@ namespace ContactInformation.API.Controllers
 
             await _contactInformationRepository.Create(id, model);
 
-            await GenerateReport();
+            await _reportRepository.GenerateReport();
 
             return Ok(model);
         }
@@ -70,7 +70,7 @@ namespace ContactInformation.API.Controllers
 
             await _contactInformationRepository.Update(id, model);
 
-            await GenerateReport();
+            await _reportRepository.GenerateReport();
 
             return Ok(model);
         }
@@ -90,7 +90,7 @@ namespace ContactInformation.API.Controllers
 
             var result = await _contactInformationRepository.Delete(id, informationId);
 
-            await GenerateReport();
+            await _reportRepository.GenerateReport();
 
             return Ok(result);
         }
@@ -110,18 +110,10 @@ namespace ContactInformation.API.Controllers
 
             var result = await _contactInformationRepository.Delete(id, informationIds);
 
-            await GenerateReport();
+            await _reportRepository.GenerateReport();
 
             return Ok(result);
         }
-
-
-        private async Task GenerateReport()
-        {
-            // publish event 
-            var result = await _reportRepository.GenerateLocationReport();
-            var locationReport = _mapper.Map<List<LocationReportEvent>>(result);
-            await _publishEndpoint.Publish(new LocationReportEventList { LocationReportEvents = locationReport });
-        }
+        
     }
 }
