@@ -18,3 +18,6 @@ docker stop $(docker ps -aq)
 docker rmi $(docker images -a)
 docker system prune
 docker images
+
+
+dotnet test /p:CollectCoverage=true
