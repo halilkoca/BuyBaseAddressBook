@@ -49,6 +49,7 @@ namespace Contact.API.Repositories.Report
                     PeopleCount = a.Sum(b => b.PeopleCount),
                     PhoneNumberCount = a.Sum(b => b.PhoneNumberCount),
                 })
+                .OrderByDescending(a => a.LocationCount)
                 .ToList();
 
             return response;
